@@ -23,6 +23,7 @@ class Transfer extends Component
     public $alldeptlist;
     public $allofficelist;
     public $filterofficelist;
+    public $newfilterofficelist;
     public $newdeptcode;
     public $newofficecode;
     public $search;
@@ -53,6 +54,19 @@ class Transfer extends Component
             $this->filterofficelist = null;
         }
     }
+
+    public function newdeptchange()
+    {
+        if ($this->newdeptcode != "") {
+            $this->newfilterofficelist = OfficeMaster::where('distcode', $this->distcode)
+                ->where('deptcode', $this->newdeptcode)->get();
+        } else {
+            $this->newdeptcode = null;
+            $this->newofficecode = null;
+            $this->newfilterofficelist = null;
+        }
+    }
+
     public function officechange()
     {
         if ($this->officecode == "") {

@@ -182,12 +182,12 @@
             <div class="grid grid-cols-2 gap-2">
                 <div class="w-full">
                     <x-label for="name" value="{{ __('Department') }}" />
-                    <x-select wire:model.defer="newdeptcode" wire:change="deptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
+                    <x-select wire:model.defer="newdeptcode" wire:change="newdeptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
                 </div>
-                @if($filterofficelist)
+                @if($newfilterofficelist)
                 <div class="w-full">
                     <x-label for="name" value="{{ __('Office') }}" />
-                    <x-select wire:model.defer="newofficecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$filterofficelist" idfield="officecode" textfield="office" />
+                    <x-select wire:model.defer="newofficecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$newfilterofficelist" idfield="officecode" textfield="office" />
                 </div>
                 @endif
                
