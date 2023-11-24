@@ -166,24 +166,36 @@
                     {{$empid->electionclass->description??""}}
                 </div>
             </div>
+            <div class="w-full flex gap-x-5">
+                <div class="mt-4 w-full">
+                    <x-label for="name" value="{{ __('Hrms Code') }}" class="font-semibold"  />
+                    {{$empid->hrmscode??""}}
+                </div>
+                
+            </div>
 
-            @if($empid && $empid->del=="o")    
-            <div class="mt-4 w-full">
-                <x-label for="name" value="{{ __('Reason of Exemption') }}"  class="font-semibold" />
-                <x-input class="w-full p-2" type="textarea" id="multilineText" wire:model.defer="Remarks" rows="10" />
-            </div>
-            @else
-             <div class="mt-4 w-full">
-                <x-label for="name" value="{{ __('Reason of Exemption') }}" class="font-semibold"  />
-                <div class="bg-red-800/10 p-2 rounded-md mt-2 w-full">
-                {{$empid->Remarks??"NA"}}
-                </div> 
-            </div>
-            @endif
+           
             
         </div>
 
-        
+        <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
+            <div class="grid grid-cols-2 gap-2">
+                <div class="w-full">
+                    <x-label for="name" value="{{ __('Department') }}" />
+                    <x-select wire:model.defer="newdeptcode" wire:change="deptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
+                </div>
+                @if($filterofficelist)
+                <div class="w-full">
+                    <x-label for="name" value="{{ __('Office') }}" />
+                    <x-select wire:model.defer="newofficecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$filterofficelist" idfield="officecode" textfield="office" />
+                </div>
+                @endif
+               
+
+
+            </div>
+
+        </div>
 
     </x-slot>
 
@@ -191,15 +203,11 @@
         <x-secondary-button wire:click="toggle()" wire:loading.attr="disabled">
             Cancel
         </x-secondary-button>
-        @if($empid && $empid->del=="o")    
-        <x-primary-button  class="ml-2 " wire:click="exemptobject()" wire:loading.attr="disabled">
-            Exempt Employee
+            
+        <x-primary-button  class="ml-2 " wire:click="transferobject()" wire:loading.attr="disabled">
+            Transfer Employee
         </x-primary-button>
-        @else
-        <x-primary-button class="ml-2" wire:click="removeexemptobject()" wire:loading.attr="disabled">
-            Remove Exemption
-        </x-primary-button>
-        @endif
+       
     </x-slot>
 </x-confirmation-modal>
 </div>

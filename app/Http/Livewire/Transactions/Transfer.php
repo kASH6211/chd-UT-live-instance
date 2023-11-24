@@ -23,6 +23,8 @@ class Transfer extends Component
     public $alldeptlist;
     public $allofficelist;
     public $filterofficelist;
+    public $newdeptcode;
+    public $newofficecode;
     public $search;
     public $searchresult = [];
     public $transfermodal;
@@ -68,23 +70,27 @@ class Transfer extends Component
             $this->toggle();
         }
     }
-    public function exemptobject()
+    public function transferobject()
     {
-        $data = ["Remarks" => $this->Remarks];
+        $data = ["newdeptcode" => $this->newdeptcode,"newofficecode" => $this->newofficecode];
         Validator::make(
             $data,
             [
-                'Remarks' => ['required', 'string']
+                'newdeptcode' => ['required'],
+                'newofficecode' => ['required']
+
             ],
             [
-                'Remarks.required' => 'Remarks for Exemption is mandatory.',
+                'newdeptcode.required' => 'Select Department where Employee is Transferred to.',
+                'newofficecode.required' => 'SelectOffice where Employee is Transferred to.',
                 // Add more custom messages for other rules as needed.
             ]
         )->validate();
 
         if ($this->empid) {
-            $this->empid->Remarks = $this->empid->Remarks . "-->" . $this->Remarks;
-            $this->empid->del = 'd';
+            $this->empid->deptcode = $this->newdeptcode ;
+            $this->empid->officecode = $this->newofficecode ;
+            $this->empid->del = 'o';
             $this->empid->save();
             $this->toggle();
         }
