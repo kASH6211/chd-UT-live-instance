@@ -111,7 +111,7 @@
     </div>
  
 
-<x-confirmation-modal wire:model="exemptmodal">
+<x-confirmation-modal wire:model="transfermodal">
     <x-slot name="icon" class="">
               <svg class="h-6 w-6 stroke-white" stroke-width="1.5" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m0-3l-3-3m0 0l-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
@@ -180,6 +180,25 @@
                 </div> 
             </div>
             @endif
+            
+        </div>
+
+        <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
+            <div class="grid grid-cols-3 gap-2">
+                <div class="w-full">
+                    <x-label for="name" value="{{ __('Department') }}" />
+                    <x-select wire:model.defer="deptcode" wire:change="deptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
+                </div>
+                @if($filterofficelist)
+                <div class="w-full">
+                    <x-label for="name" value="{{ __('Office') }}" />
+                    <x-select wire:model.defer="officecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$filterofficelist" idfield="officecode" textfield="office" />
+                </div>
+                @endif
+               
+
+
+            </div>
 
         </div>
 
