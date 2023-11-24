@@ -431,7 +431,7 @@
                 <th class="w-4/12 border-b border-gray-200 p-1">Select as </th>
                 <td class="w-8/12 border-b border-gray-200 p-1">
                     @if($viewobject)
-                    {{ $viewobject->electionclass->description}}
+                    {{ $viewobject->electionclass->description??""}}
                     @endif
                 </td>
             </tr>

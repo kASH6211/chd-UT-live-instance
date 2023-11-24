@@ -124,6 +124,11 @@
                                 {{ __('Mark Exemptions') }}
                             </x-dropdown-link>
                             @endif
+                            @if(Session::get('permissions.transfer_employee')==1)
+                            <x-dropdown-link href="/transactions/transfer">
+                                {{ __('Transfer Employee') }}
+                            </x-dropdown-link>
+                            @endif
                             {{-- <x-dropdown-link href="#" @click.prevent="$root.submit();">
                                 {{ __('Polling Personnel Data Editing by Office') }}
                             </x-dropdown-link>

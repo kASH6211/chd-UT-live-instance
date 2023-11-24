@@ -133,7 +133,15 @@
 
             <x-validation-errors class="mb-4" />
             @if($empid)
-            <img src="{{$this->retrieveImage($empid->photoid) }}" alt="No Photo Available" class="h-32 w-32 rounded-md bg-gray-300">
+             <div class="w-full grid grid-cols-2 gap-x-5">
+                <div>
+                 <img src="{{$this->retrieveImage($empid->photoid) }}" alt="No Photo Available" class="h-32 w-32 rounded-md bg-gray-300">
+                </div>
+                <div class="w-full">
+                    <x-label for="name" value="{{ __('Hrms Code') }}" class="font-semibold"  />
+                    <span class="text-lg font-bold text-blue-500">{{$empid->hrmscode??""}}</span>
+                </div>
+            </div>
             @endif
             <div class="w-full flex gap-x-5">
                 <div class="mt-4 w-full">
@@ -166,18 +174,15 @@
                     {{$empid->electionclass->description??""}}
                 </div>
             </div>
-            <div class="w-full flex gap-x-5">
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Hrms Code') }}" class="font-semibold"  />
-                    {{$empid->hrmscode??""}}
-                </div>
-                
-            </div>
+           
 
            
             
         </div>
-
+        <div class="mt-4 p-3 border-0 bg-yellow-200 rounded-md mb-2">
+                <span class="font-semibold text-red-700">Warning! -</span>Employee will be transfered to following new Department / Office. Once Employee data is transfered it will not be availble to current office for modifications. 
+                <span class="font-semibold">Are you sure you want to transfer this employee?</span>
+        </div>            
         <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
             <div class="grid grid-cols-2 gap-2">
                 <div class="w-full">

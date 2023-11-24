@@ -38,8 +38,8 @@ class Transfer extends Component
     {
 
         $this->distcode = Auth::user()->distcode;
-        $this->alldeptlist = DeptMaster::where('distcode', $this->distcode)->get();
-        $this->allofficelist = OfficeMaster::where('distcode', $this->distcode)->get();
+        $this->alldeptlist = DeptMaster::where('distcode', $this->distcode)->orderBy('deptname','ASC')->get();
+        $this->allofficelist = OfficeMaster::where('distcode', $this->distcode)->orderBy('office','ASC')->get();
 
         // $this->filterofficelist=$this->allofficelist;  
     }
@@ -47,7 +47,7 @@ class Transfer extends Component
     {
         if ($this->deptcode != "") {
             $this->filterofficelist = OfficeMaster::where('distcode', $this->distcode)
-                ->where('deptcode', $this->deptcode)->get();
+                ->where('deptcode', $this->deptcode)->orderBy('office','ASC')->get();
         } else {
             $this->deptcode = null;
             $this->officecode = null;
@@ -59,7 +59,7 @@ class Transfer extends Component
     {
         if ($this->newdeptcode != "") {
             $this->newfilterofficelist = OfficeMaster::where('distcode', $this->distcode)
-                ->where('deptcode', $this->newdeptcode)->get();
+                ->where('deptcode', $this->newdeptcode)->orderBy('office','ASC')->get();
         } else {
             $this->newdeptcode = null;
             $this->newofficecode = null;
@@ -102,12 +102,73 @@ class Transfer extends Component
         )->validate();
 
         if ($this->empid) {
+            $newdeptslno=$this->fetchdeptslnofromID($this->distcode,$this->newdeptcode,$this->newofficecode);
+            $newphotoid=$this->generatePhotoId($this->distcode,$this->newdeptcode,$this->newofficecode,$newdeptslno);
+            dd($this->distcode,$this->newdeptcode,$this->newofficecode);
+            $photoid=PollingDataPhoto::where('id',$this->empid->photoid)->first();
+            $tempdata["id"]=$newphotoid;
+            $tempdata["deptslno"]=$newdeptslno;
+            $tempdata["empphoto"]=$photoid->empphoto;
+
+            $photoid->delete();
+            
+            
+            
+            //update polling_data
+            $this->empid->photoid=$newphotoid;
             $this->empid->deptcode = $this->newdeptcode ;
             $this->empid->officecode = $this->newofficecode ;
             $this->empid->del = 'o';
+            $this->empid->transferred = 'N';
             $this->empid->save();
+            
+            PollingDataPhoto::create($tempdata);
+
             $this->toggle();
+            $this->dispatchBrowserEvent('banner-message', [
+                'style' => 'success',
+                'message' => 'Employee Transfered to New Department-Office'
+            ]); 
+            $this->emit('close-banner');
         }
+    }
+
+    public function generatePhotoId($distcode,$deptcode,$officecode,$deptslno)
+    {
+        if($distcode<10)
+            $distcode = '0'.$distcode;
+        $deptcode = $this->addPadding($deptcode);
+        $officecode = $this->addPadding($officecode);
+        $deptslno = $this->addPadding($deptslno);
+        $temp=$distcode.$deptcode.$officecode.$deptslno;
+        return $temp;
+
+    }
+    public function addPadding($code)
+    {
+       $code = intval($code);
+        if($code<10)
+            return '000'.$code;
+        else if($code>=10 && $code<100)
+            return '00'.$code;
+        else if($code>=100 && $code<1000)
+            return '0'.$code;
+        
+            return $code;
+    }
+
+
+    public function fetchdeptslnofromID($distcode,$deptcode,$officecode)
+    {
+        $pdcount = PollingData::where('distcode',$distcode)->where('deptcode',$deptcode)->where('officecode',$officecode)->orderBy('id','DESC')->first();
+        dd($pdcount);
+        
+        $temp=1;
+        
+        if($pdcount && $pdcount->deptslno!=null){
+         $temp=($pdcount->deptslno+1);}
+        
+        return $temp;
     }
 
     public function getdata($id)
@@ -129,12 +190,12 @@ class Transfer extends Component
     {
 
         $header = ['Name', 'Father/Husband Name', 'Mobile', 'Office', 'Designation', 'Action'];
-        $deptlist = OfficeLock::where('distcode', $this->distcode)->where('imported', 0)->pluck('office_id');
-        $off = OfficeMaster::whereIn('id', $deptlist)->get();
+        $deptlist = DeptMaster::where('distcode', $this->distcode)->pluck('deptcode');
+        $off = OfficeMaster::whereIn('deptcode', $deptlist)->get();
         if (count($off)) {
             $conditions = [];
             foreach ($off as $o) {
-                $conditions[] = ['distcode' => $o->distcode, 'deptcode' => $o->deptcode, 'officecode' => $o->officecode];
+                $conditions[] = ['transferred'=>'T','del'=>'d','distcode' => $o->distcode, 'deptcode' => $o->deptcode, 'officecode' => $o->officecode];
             }
 
             $query = PollingData::where(function ($query) use ($conditions) {
