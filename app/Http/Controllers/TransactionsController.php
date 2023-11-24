@@ -33,6 +33,11 @@ class TransactionsController extends Controller
     {
         return view('transactions.exemption');
     }
+
+    public function transfer()
+    {
+        return view('transactions.transfer');
+    }
     
     public function submittedData($id)
     {

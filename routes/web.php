@@ -54,6 +54,8 @@ Route::get('/master/boothlocn',[MastersController::class , 'boothlocnmaster'])->
 Route::get('/transactions/employee',[TransactionsController::class , 'employeedata'])->name('employeedata');
 Route::get('/transactions/employee/add',[TransactionsController::class , 'employeedataadd'])->name('employeedataadd');
 Route::get('/transactions/employee/edit/{id}',[TransactionsController::class , 'employeedataedit'])->name('employeedataedit');
+Route::get('/transactions/transfer',[TransactionsController::class , 'transfer'])->name('transfer');
+
 //Transaction Routes Ends Here
 Route::get('/transactions/submitted',[TransactionsController::class , 'submittedOffices'])->name('submittedOffices');
 Route::get('/transactions/submitted/{id}',[TransactionsController::class , 'submittedData'])->name('submittedData');
