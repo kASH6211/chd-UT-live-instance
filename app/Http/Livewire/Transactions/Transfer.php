@@ -25,7 +25,7 @@ class Transfer extends Component
     public $filterofficelist;
     public $search;
     public $searchresult = [];
-    public $exemptmodal;
+    public $transfermodal;
     public $empid;
     public $Remarks;
 
@@ -97,7 +97,7 @@ class Transfer extends Component
     }
     public function toggle()
     {
-        $this->exemptmodal = !$this->exemptmodal;
+        $this->transfermodal = !$this->transfermodal;
         $this->Remarks = "";
     }
     public function getOfficeName($distcode, $deptcode, $officecode)
