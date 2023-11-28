@@ -480,8 +480,10 @@
         </div>
 
 
-        @if($object->photoid !=null && $object->completed==1)
-        <img src="{{ $this->retrieveImage($object->photoid) }}" alt="Photo" class="h-32 w-32">
+        @if($object->photoid !=null )
+            @if($this->retrieveImage($object->photoid))
+            <img src="{{ $this->retrieveImage($object->photoid) }}" alt="Photo" class="h-32 w-32 rounded-md">
+            @endif
         @endif
 
 

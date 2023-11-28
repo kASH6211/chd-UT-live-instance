@@ -131,33 +131,36 @@ class Transfer extends Component
             $newphotoid=$this->generatePhotoId($this->distcode,$this->newdeptcode,$this->newofficecode,$newdeptslno);
             //dd($this->distcode,$this->newdeptcode,$this->newofficecode);
             $photoid=PollingDataPhoto::where('id',$this->empid->photoid)->first();
-            $tempdata["id"]=$newphotoid;
-            $tempdata["deptslno"]=$newdeptslno;
-
+            
             if($photoid)
             {
-                $tempdata["empphoto"]=$photoid->empphoto??Null;
-                $photoid->delete();
-                PollingDataPhoto::create($tempdata);
-                $this->empid->photoid=$newphotoid;
+                         $photoid->delete();
             }
-            else
-            {
-                $this->empid->photoid=Null;
-
-            }
-            
-            
-            
+           
             
             //update polling_data
-           
+            $this->empid->photoid=$newphotoid;
             $this->empid->deptcode = $this->newdeptcode ;
             $this->empid->officecode = $this->newofficecode ;
             $this->empid->del = 'o';
             $this->empid->completed = 0;
             $this->empid->transferred = 'N';
             $this->empid->save();
+
+            $tempdata["id"]=$newphotoid;
+            $tempdata["deptslno"]=$newdeptslno;
+            if($photoid)
+            {
+                $tempdata["empphoto"]=$photoid->empphoto;
+                $row=new PollingDataPhoto();
+                $row->id=$tempdata["id"];
+                $row->deptslno=$tempdata["deptslno"];
+                $row->empphoto=$tempdata["empphoto"];
+                $row->save();
+               
+            }
+
+           
             
            
 

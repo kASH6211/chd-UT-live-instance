@@ -576,7 +576,7 @@ class PollingPersonnelDataEdit extends Component
             return 'data:image/png;base64,'.stream_get_contents($pdp->empphoto);
         }
       }
-        return "Photo";
+        return null;
 
     }
   
