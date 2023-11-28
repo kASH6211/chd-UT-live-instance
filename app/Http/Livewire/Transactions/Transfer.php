@@ -100,29 +100,66 @@ class Transfer extends Component
                 // Add more custom messages for other rules as needed.
             ]
         )->validate();
+        $officeid = $this->getOfficeIdFromCode($this->distcode,$this->newdeptcode,$this->newofficecode);
+        if(!$officeid)
+        { 
+            $this->toggle();
+            $this->dispatchBrowserEvent('banner-message', [
+                'style' => 'danger',
+                'message' => 'An Error occured while transferring the employee to destination office.'
+            ]); 
+            $this->emit('close-banner');
+            return;
 
+        }
+     
+        $officelock = $this->checkOfficeAlreadyLocked($this->distcode,$officeid);
+       
+        if($officelock)
+        {
+            //Show message and return
+            $this->toggle();
+            $this->dispatchBrowserEvent('banner-message', [
+                'style' => 'danger',
+                'message' => 'Destination office data has been locked hence transfer cannot be completed.'
+            ]); 
+            $this->emit('close-banner');
+            return;
+        }
         if ($this->empid) {
             $newdeptslno=$this->fetchdeptslnofromID($this->distcode,$this->newdeptcode,$this->newofficecode);
             $newphotoid=$this->generatePhotoId($this->distcode,$this->newdeptcode,$this->newofficecode,$newdeptslno);
-            dd($this->distcode,$this->newdeptcode,$this->newofficecode);
+            //dd($this->distcode,$this->newdeptcode,$this->newofficecode);
             $photoid=PollingDataPhoto::where('id',$this->empid->photoid)->first();
             $tempdata["id"]=$newphotoid;
             $tempdata["deptslno"]=$newdeptslno;
-            $tempdata["empphoto"]=$photoid->empphoto;
 
-            $photoid->delete();
+            if($photoid)
+            {
+                $tempdata["empphoto"]=$photoid->empphoto??Null;
+                $photoid->delete();
+                PollingDataPhoto::create($tempdata);
+                $this->empid->photoid=$newphotoid;
+            }
+            else
+            {
+                $this->empid->photoid=Null;
+
+            }
+            
             
             
             
             //update polling_data
-            $this->empid->photoid=$newphotoid;
+           
             $this->empid->deptcode = $this->newdeptcode ;
             $this->empid->officecode = $this->newofficecode ;
             $this->empid->del = 'o';
+            $this->empid->completed = 0;
             $this->empid->transferred = 'N';
             $this->empid->save();
             
-            PollingDataPhoto::create($tempdata);
+           
 
             $this->toggle();
             $this->dispatchBrowserEvent('banner-message', [
@@ -132,7 +169,26 @@ class Transfer extends Component
             $this->emit('close-banner');
         }
     }
+    public function getOfficeIdFromCode($distcode,$deptcode, $officecode)
+    {
+        $office= OfficeMaster::where('distcode',$distcode)->where('deptcode',$deptcode)->where('officecode',$officecode)->first();
+        if($office && $office->id)
+        {
+           return $office->id;
+        }
+        return null;
+    }
+    public function checkOfficeAlreadyLocked($distcode, $officeid)
+    {
+        $coll = OfficeLock::where('distcode',$distcode)->where('office_id',$officeid)->count();
+        
+        if($coll>0)
+        {
+            return true;
+        }
+        return false;
 
+    }
     public function generatePhotoId($distcode,$deptcode,$officecode,$deptslno)
     {
         if($distcode<10)
@@ -161,7 +217,7 @@ class Transfer extends Component
     public function fetchdeptslnofromID($distcode,$deptcode,$officecode)
     {
         $pdcount = PollingData::where('distcode',$distcode)->where('deptcode',$deptcode)->where('officecode',$officecode)->orderBy('id','DESC')->first();
-        dd($pdcount);
+       
         
         $temp=1;
         
