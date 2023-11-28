@@ -28,7 +28,7 @@ return new class extends Migration
             $table->integer('PayScaleCode')->nullable();
             $table->foreign(['distcode','PayScaleCode'])->references(['distcode','PayScaleCode'])->on('pay_scales')->onDelete('restrict');
             $table->integer('basicPay')->nullable();
-            $table->string('office',60)->nullable();
+            $table->string('office',300)->nullable();
             $table->string('category',1)->nullable();
             $table->integer('DesigCode')->nullable();
             $table->foreign(['distcode', 'DesigCode'])->references(['distcode', 'DesigCode'])->on('designation_masters')->onDelete('restrict');
