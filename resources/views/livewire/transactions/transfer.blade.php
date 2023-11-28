@@ -2,7 +2,7 @@
     <x-loading-indicator />
     <div>
         <div class="py-4 border-t-0 border-gray-400 border-dashed">
-            <h1 class="font-semibold text-lg text-gray-800 ">Search Employees for Exemption</h1>
+            <h1 class="font-semibold text-lg text-gray-800 ">Search Employees for Transfer</h1>
         </div>
         <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
             <div class="grid grid-cols-3 gap-2">
@@ -57,35 +57,22 @@
 
                     <td class=" border text-gray-600 px-2">{{$row->designation->Designation??"NA"}}</td>
 
-                   
-                    @if($row->del=="o")    
-
-                    <td class=" text-center border text-gray-600">
-                        <a wire:click="getdata('{{$row->id}}','apply')">
-
-                            <svg data-tooltip-target="tooltip-default-paused" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-red-700 m-auto">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m0-3l-3-3m0 0l-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
-                                  </svg>
-                                  
 
 
-                        </a>
-                        <div id="tooltip-default-paused" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                            Exempt employee from polling duty
-                            <div class="tooltip-arrow" data-popper-arrow></div>
-                        </div>
-                    </td>
-                    @else
+
+
+                    @if($row->transferred=="T")
                     <td class="text-center border text-gray-600 ">
-                        <a wire:click="getdata('{{$row->id}}','remove')">
-                            <svg data-tooltip-target="tooltip-default" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-green-700 m-auto">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
-                                  </svg>
-                                  
+                        <a wire:click="getdata('{{$row->id}}','remove')" class="flex justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l6-6m0 0l6 6m-6-6v12a6 6 0 01-12 0v-3" />
+                            </svg>
+
+
                         </a>
 
                         <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                            Remove exemption and make employee available for polling duty
+                            Transfer employee within District
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                     </td>
@@ -109,110 +96,110 @@
         </div>
         @endif
     </div>
- 
 
-<x-confirmation-modal wire:model="transfermodal">
-    <x-slot name="icon" class="">
-              <svg class="h-6 w-6 stroke-white" stroke-width="1.5" fill="none" viewBox="0 0 24 24">
+
+    <x-confirmation-modal wire:model="transfermodal">
+        <x-slot name="icon" class="">
+            <svg class="h-6 w-6 stroke-white" stroke-width="1.5" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m0-3l-3-3m0 0l-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
-              </svg>
+            </svg>
 
-    </x-slot>
-    <x-slot name="subtitle">
+        </x-slot>
+        <x-slot name="subtitle">
 
-    </x-slot>
+        </x-slot>
 
-    <x-slot name="title">
-        Exemption Employee from Election Duty
-    </x-slot>
+        <x-slot name="title">
+            Exemption Employee from Election Duty
+        </x-slot>
 
 
-    <x-slot name="content">
+        <x-slot name="content">
 
-        <div>
+            <div>
 
-            <x-validation-errors class="mb-4" />
-            @if($empid)
-             <div class="w-full grid grid-cols-2 gap-x-5">
-                <div>
-                 <img src="{{$this->retrieveImage($empid->photoid) }}" alt="No Photo Available" class="h-32 w-32 rounded-md bg-gray-300">
-                </div>
-                <div class="w-full">
-                    <x-label for="name" value="{{ __('Hrms Code') }}" class="font-semibold"  />
-                    <span class="text-lg font-bold text-blue-500">{{$empid->hrmscode??""}}</span>
-                </div>
-            </div>
-            @endif
-            <div class="w-full flex gap-x-5">
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Name') }}" class="font-semibold" />
-                    {{$empid->Name??""}}
-                </div>
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Father/Husband Name') }}" class="font-semibold"  />
-                    {{$empid->FName??""}}
-                </div>
-
-            </div>
-            <div class="w-full flex gap-x-5">
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Mobile') }}" class="font-semibold"  />
-                    {{$empid->mobileno??""}}
-                </div>
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Designation') }}" class="font-semibold"  />
-                    {{$empid->designation->Designation??""}}
-                </div>
-            </div>
-            <div class="w-full flex gap-x-5">
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Employee Type') }}" class="font-semibold"  />
-                    {{$empid->employeetype->EmpTypeName??""}}
-                </div>
-                <div class="mt-4 w-full">
-                    <x-label for="name" value="{{ __('Class') }}"  class="font-semibold" />
-                    {{$empid->electionclass->description??""}}
-                </div>
-            </div>
-           
-
-           
-            
-        </div>
-        <div class="mt-4 p-3 border-0 bg-yellow-200 rounded-md mb-2">
-                <span class="font-semibold text-red-700">Warning! -</span>Employee will be transfered to following new Department / Office. Once Employee data is transfered it will not be availble to current office for modifications. 
-                <span class="font-semibold">Are you sure you want to transfer this employee?</span>
-        </div>            
-        <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
-            <div class="grid grid-cols-2 gap-2">
-                <div class="w-full">
-                    <x-label for="name" value="{{ __('Department') }}" />
-                    <x-select wire:model.defer="newdeptcode" wire:change="newdeptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
-                </div>
-                @if($newfilterofficelist)
-                <div class="w-full">
-                    <x-label for="name" value="{{ __('Office') }}" />
-                    <x-select wire:model.defer="newofficecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$newfilterofficelist" idfield="officecode" textfield="office" />
+                <x-validation-errors class="mb-4" />
+                @if($empid)
+                <div class="w-full grid grid-cols-2 gap-x-5">
+                    <div>
+                        <img src="{{$this->retrieveImage($empid->photoid) }}" alt="No Photo Available" class="h-32 w-32 rounded-md bg-gray-300">
+                    </div>
+                    <div class="w-full">
+                        <x-label for="name" value="{{ __('Hrms Code') }}" class="font-semibold" />
+                        <span class="text-lg font-bold text-blue-500">{{$empid->hrmscode??""}}</span>
+                    </div>
                 </div>
                 @endif
-               
+                <div class="w-full flex gap-x-5">
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Name') }}" class="font-semibold" />
+                        {{$empid->Name??""}}
+                    </div>
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Father/Husband Name') }}" class="font-semibold" />
+                        {{$empid->FName??""}}
+                    </div>
+
+                </div>
+                <div class="w-full flex gap-x-5">
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Mobile') }}" class="font-semibold" />
+                        {{$empid->mobileno??""}}
+                    </div>
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Designation') }}" class="font-semibold" />
+                        {{$empid->designation->Designation??""}}
+                    </div>
+                </div>
+                <div class="w-full flex gap-x-5">
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Employee Type') }}" class="font-semibold" />
+                        {{$empid->employeetype->EmpTypeName??""}}
+                    </div>
+                    <div class="mt-4 w-full">
+                        <x-label for="name" value="{{ __('Class') }}" class="font-semibold" />
+                        {{$empid->electionclass->description??""}}
+                    </div>
+                </div>
+
+
 
 
             </div>
+            <div class="mt-4 p-3 border-0 bg-yellow-200 rounded-md mb-2">
+                <span class="font-semibold text-red-700">Warning! -</span>Employee will be transfered to following new Department / Office. Once Employee data is transfered it will not be availble to current office for modifications.
+                <span class="font-semibold">Are you sure you want to transfer this employee?</span>
+            </div>
+            <div class="flex mb-2 bg-gray-200 p-2 pl-4 pb-5 rounded-md">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="w-full">
+                        <x-label for="name" value="{{ __('Department') }}" />
+                        <x-select wire:model.defer="newdeptcode" wire:change="newdeptchange" type="text" class="block w-full" :ddlist="$alldeptlist" idfield="deptcode" textfield="deptname" />
+                    </div>
+                    @if($newfilterofficelist)
+                    <div class="w-full">
+                        <x-label for="name" value="{{ __('Office') }}" />
+                        <x-select wire:model.defer="newofficecode" wire:change="officechange" type="text" class="block w-full" :ddlist="$newfilterofficelist" idfield="officecode" textfield="office" />
+                    </div>
+                    @endif
 
-        </div>
 
-    </x-slot>
 
-    <x-slot name="footer">
-        <x-secondary-button wire:click="toggle()" wire:loading.attr="disabled">
-            Cancel
-        </x-secondary-button>
-            
-        <x-primary-button  class="ml-2 " wire:click="transferobject()" wire:loading.attr="disabled">
-            Transfer Employee
-        </x-primary-button>
-       
-    </x-slot>
-</x-confirmation-modal>
+                </div>
+
+            </div>
+
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-secondary-button wire:click="toggle()" wire:loading.attr="disabled">
+                Cancel
+            </x-secondary-button>
+
+            <x-primary-button class="ml-2 " wire:click="transferobject()" wire:loading.attr="disabled">
+                Transfer Employee
+            </x-primary-button>
+
+        </x-slot>
+    </x-confirmation-modal>
 </div>

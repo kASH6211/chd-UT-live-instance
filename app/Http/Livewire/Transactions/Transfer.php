@@ -144,6 +144,7 @@ class Transfer extends Component
             $this->empid->officecode = $this->newofficecode ;
             $this->empid->del = 'o';
             $this->empid->completed = 0;
+            $this->empid->deptslno = $newdeptslno;
             $this->empid->transferred = 'N';
             $this->empid->save();
 
@@ -219,9 +220,8 @@ class Transfer extends Component
 
     public function fetchdeptslnofromID($distcode,$deptcode,$officecode)
     {
-        $pdcount = PollingData::where('distcode',$distcode)->where('deptcode',$deptcode)->where('officecode',$officecode)->orderBy('id','DESC')->first();
-       
-        
+        $pdcount = PollingData::where('distcode',$distcode)->where('deptcode',$deptcode)->where('officecode',$officecode)->orderBy('deptslno','DESC')->first();
+             
         $temp=1;
         
         if($pdcount && $pdcount->deptslno!=null){
