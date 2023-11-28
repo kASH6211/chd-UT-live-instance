@@ -1,0 +1,21 @@
+controller-->transactioncontroler.php
+
+views->navigationmenu.blade
+
+http->livewire->transactions->pollingperonnneldataedit.php
+http->livewire->transactions->transfer.php
+
+views->transactions->trasfer.blade
+views->livewire->transactions->trasfer.blade
+views->livewire->transactions->pollingdataEdit.blade
+views->livewire->transactions->pollingData.blade
+
+
+DATABASE
+office field lenghth in polling data increase to 200
+privileges table  {transfer_employee,description,1,transaction)
+
+
+
+
+
